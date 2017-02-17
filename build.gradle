@@ -1,0 +1,92 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven { url "http://repo.spring.io/snapshot" }
+		maven { url "http://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath('com.bmuschko:gradle-docker-plugin:3.0.5')
+		classpath("org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+apply plugin: 'spring-boot'
+apply plugin: 'com.bmuschko.docker-java-application'
+apply plugin: 'jacoco'
+apply plugin: "com.github.kt3k.coveralls"
+
+
+group = 'com.github.yukinami'
+version = '0.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	maven { url "http://repo.spring.io/snapshot" }
+	maven { url "http://repo.spring.io/milestone" }
+}
+
+
+ext['thymeleaf.version'] = '3.0.2.RELEASE'
+ext['thymeleaf-layout-dialect.version'] = '2.0.4'
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-devtools')
+	compile("org.projectlombok:lombok:${lombokVersion}")
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.codehaus.groovy:groovy')
+
+	compile('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect')
+	compile('org.thymeleaf.extras:thymeleaf-extras-springsecurity4')
+	compile("io.github.jpenren:thymeleaf-spring-data-dialect:${thymeleafSpringDataDialectVersion}")
+
+	runtime('org.liquibase:liquibase-core')
+	runtime('com.h2database:h2')
+	runtime('mysql:mysql-connector-java')
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.spockframework:spock-spring')
+	testCompile("org.gebish:geb-spock:${gebSpockVersion}")
+	testCompile("org.seleniumhq.selenium:selenium-api")
+	testCompile("org.seleniumhq.selenium:htmlunit-driver")
+	testCompile("org.springframework.security:spring-security-test")
+
+	//webjars
+	compile('org.webjars:webjars-locator')
+	compile("org.webjars:bootstrap:${bootstrapVersion}")
+}
+
+bootRepackage {
+	excludeDevtools = true
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled = true
+		html.enabled = true
+	}
+}
+
+docker {
+	url 'http://192.168.1.6:2375'
+	javaApplication {
+		tag = "yukinami/${jar.baseName}"
+	}
+}
+
+eclipse {
+	classpath {
+		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
+		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
+	}
+}
