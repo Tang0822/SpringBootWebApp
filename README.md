@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Spring Boot WebApp Boilerplate
 
 [![Build Status Img]][Build Status]
@@ -237,3 +238,7 @@ NOTE: 如果@Sql中操作的表和`import.sql`中有重复的，建议在@Sql执
 [Coverage Status Img]: https://coveralls.io/repos/github/yukinami/spring-boot-webapp-boilerplate/badge.svg?branch=master
 [Coverage Status]: https://coveralls.io/github/yukinami/spring-boot-webapp-boilerplate?branch=master
 
+=======
+# SpringBootWebApp
+Spring+SpringMVC+SpringDataJpa项目模板
+>>>>>>> ee1acaac41eea4b45773322a4983949cee00b3da
